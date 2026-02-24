@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Lifetopia World - Mini Tutorial</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico?v=1">
+  <style>
+    @font-face {
+      font-family: "Munro";
+      src: url("fonts/Munro.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #071f12;
+      color: #e5ffe0;
+      font-family: "Munro", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .frame {
+      max-width: 960px;
+      width: 100%;
+      margin: 24px auto;
+      border: 4px solid #3bbf4f;
+      background: linear-gradient(180deg, #103824 0%, #071f12 100%);
+      box-shadow: 0 0 0 4px #0b2817, 0 0 24px rgba(0, 0, 0, 0.9);
+    }
+
+    .header {
+      padding: 16px 20px;
+      border-bottom: 2px solid #3bbf4f;
+      background: #0b2817;
+    }
+
+    .title {
+      font-size: 28px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #b4ffb8;
+    }
+
+    .subtitle {
+      margin-top: 4px;
+      font-size: 14px;
+      color: #7ddf8a;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 16px;
+      padding: 16px 20px 20px;
+    }
+
+    .section-title {
+      margin: 12px 0 4px;
+      font-size: 18px;
+      color: #b4ffb8;
+      text-transform: uppercase;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .text {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .list {
+      margin: 6px 0 12px 18px;
+      padding: 0;
+    }
+
+    .list li {
+      margin-bottom: 4px;
+    }
+
+    .key {
+      display: inline-block;
+      min-width: 24px;
+      padding: 2px 6px;
+      margin: 0 2px;
+      border-radius: 3px;
+      border: 2px solid #3bbf4f;
+      background: #0b2817;
+      font-size: 12px;
+    }
+
+    .glyphs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .gif-card {
+      border: 2px solid #3bbf4f;
+      background: #0b2817;
+      padding: 6px;
+    }
+
+    .gif-card img {
+      display: block;
+      width: 100%;
+      height: auto;
+      image-rendering: pixelated;
+    }
+
+    .gif-label {
+      margin-top: 4px;
+      font-size: 12px;
+      color: #7ddf8a;
+    }
+
+    .footer {
+      padding: 10px 20px 16px;
+      border-top: 2px solid #3bbf4f;
+      background: #0b2817;
+      font-size: 12px;
+      color: #7ddf8a;
+      text-align: right;
+    }
+
+    .nft-address {
+      font-size: 11px;
+      word-break: break-all;
+      color: #e5ffe0;
+    }
+
+    a {
+      color: #b4ffb8;
+      text-decoration: none;
+      border-bottom: 1px dotted #7ddf8a;
+    }
+
+    a:hover {
+      color: #ffffff;
+      border-bottom-style: solid;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+      cursor: pointer;
+    }
+
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 80vh;
+      border: 4px solid #3bbf4f;
+      box-shadow: 0 0 20px rgba(59, 191, 79, 0.5);
+      image-rendering: pixelated;
+    }
+
+    #caption {
+      margin: auto;
+      display: block;
+      width: 80%;
+      max-width: 700px;
+      text-align: center;
+      color: #b4ffb8;
+      padding: 15px 0;
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #b4ffb8;
+      font-size: 40px;
+      font-weight: bold;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #ffffff;
+      text-decoration: none;
+    }
+
+    .gif-card {
+      cursor: pointer;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .gif-card:hover {
+      transform: scale(1.02);
+      border-color: #b4ffb8;
+    }
+
+    @media (max-width: 768px) {
+      .content {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 12px 16px;
+      }
+
+      .frame {
+        margin: 0;
+        border-left: none;
+        border-right: none;
+        box-shadow: none;
+      }
+
+      .title {
+        font-size: 22px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+      }
+
+      .section-title {
+        font-size: 16px;
+      }
+
+      .text {
+        font-size: 13px;
+      }
+
+      .modal-content {
+        width: 95%;
+        margin-top: 20%;
+      }
+
+      .close {
+        right: 20px;
+        top: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="frame">
+    <header class="header">
+      <div class="title">Lifetopia World</div>
+      <div class="subtitle">Farming Vertical Slice · Mini Tutorial</div>
+    </header>
+    <main class="content">
+      <section>
+        <h2 class="section-title">1. Prerequisites</h2>
+        <div class="text">
+          Before playing, make sure you are set up:
+          <ul class="list">
+            <li>Wallet network set to Solana Devnet</li>
+            <li>Some Devnet SOL tokens in your wallet</li>
+            <li>
+              Get free Devnet SOL from
+              <a href="https://faucet.solana.com" target="_blank" rel="noreferrer">faucet.solana.com</a>
+            </li>
+          </ul>
+        </div>
+
+        <h2 class="section-title">2. Getting Started</h2>
+        <div class="text">
+          <ol class="list">
+            <li>Click the Connect button on the main screen and connect your Solana wallet.</li>
+            <li>Select the Farm Map from the menu to enter the world.</li>
+          </ol>
+        </div>
+
+        <h2 class="section-title">3. Controls</h2>
+        <div class="text">
+          Move and explore the world:
+          <ul class="list">
+            <li><span class="key">WASD</span> or <span class="key">←↑↓→</span> move your character.</li>
+            <li><span class="key">M</span> opens and closes the World Map.</li>
+            <li><span class="key">Backspace</span> opens and closes your Backpack.</li>
+            <li>
+              Use <span class="key">1</span>–<span class="key">9</span> or mouse scroll to change the active slot.
+            </li>
+          </ul>
+        </div>
+
+        <h2 class="section-title">4. Farming Loop</h2>
+        <div class="text">
+          <ol class="list">
+            <li>Use the Shovel on the ground to till the land.</li>
+            <li>Use the Watering Can on the tilled land.</li>
+            <li>Stand near a river or pool to recharge watering energy.</li>
+            <li>Plant seeds on watered soil.</li>
+            <li>Harvest fully grown crops with the Scythe.</li>
+          </ol>
+        </div>
+      </section>
+
+      <aside class="glyphs">
+        <div class="gif-card">
+          <img src="assets/lifetopiaworld_minitutorial_3.gif" alt="Connect wallet and enter farm" />
+          <div class="gif-label">Connect wallet and enter the Farm Map.</div>
+        </div>
+        <div class="gif-card">
+          <img src="assets/lifetopiaworld_minitutorial_4.gif" alt="Tilling and watering fields" />
+          <div class="gif-label">Till, water and plant your crops.</div>
+        </div>
+        <div class="gif-card">
+          <img src="assets/lifetopiaworld_minitutorial_5.gif" alt="Using tools on resources" />
+          <div class="gif-label">Use the right tool on each resource.</div>
+        </div>
+      </aside>
+    </main>
+    <section class="content">
+      <section>
+        <h2 class="section-title">5. Collecting Resources</h2>
+        <div class="text">
+          Use the correct tool for each object:
+          <ul class="list">
+            <li>Grass with the Scythe.</li>
+            <li>Rocks with the Pickaxe.</li>
+            <li>Trees with the Axe.</li>
+            <li>Pick up loot to add collectibles to your inventory.</li>
+          </ul>
+        </div>
+
+        <h2 class="section-title">6. Shops & Economy</h2>
+        <div class="text">
+          <ul class="list">
+            <li>Click NPCs to talk or open their shop.</li>
+            <li>Use gold to buy new seeds and tools.</li>
+            <li>
+              Press Sell to enter Sell Mode, then left-click items in your inventory to sell them.
+            </li>
+          </ul>
+        </div>
+
+        <h2 class="section-title">7. Extras</h2>
+        <div class="text">
+          <ul class="list">
+            <li>Autosave keeps your progress updated while you play.</li>
+            <li>Claim your Starter Pack NFT to receive starter seeds.</li>
+          </ul>
+        </div>
+      </section>
+      <aside class="glyphs">
+        <div class="gif-card">
+          <img src="assets/lifetopiaworld_minitutorial_6.gif" alt="Shopping and selling items" />
+          <div class="gif-label">Trade with NPCs, buy seeds and sell loot.</div>
+        </div>
+        <div class="gif-card">
+          <img src="assets/lifetopiaworld_minitutorial_7.gif" alt="Exploring the farm" />
+          <div class="gif-label">Explore your farm and watch it grow.</div>
+        </div>
+      </aside>
+    </section>
+    <footer class="footer">
+      Starter Pack NFT · Contract Address:
+      <span class="nft-address">8uqVHwF24Nruit3U9X3LmTDE1t8P5CYzfe9L8FZrttxN</span>
+    </footer>
+  </div>
+
+  <!-- GIF Modal -->
+  <div id="gifModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("gifModal");
+    const modalImg = document.getElementById("img01");
+    const captionText = document.getElementById("caption");
+    const gifCards = document.querySelectorAll(".gif-card");
+
+    gifCards.forEach(card => {
+      card.onclick = function () {
+        const img = this.querySelector("img");
+        const label = this.querySelector(".gif-label");
+        modal.style.display = "block";
+        modalImg.src = img.src;
+        captionText.innerHTML = label ? label.innerHTML : img.getAttribute("alt");
+      }
+    });
+
+    const span = document.getElementsByClassName("close")[0];
+
+    span.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    modal.onclick = function (event) {
+      if (event.target === modal || event.target === span) {
+        modal.style.display = "none";
+      }
+    }
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === "Escape") {
+        modal.style.display = "none";
+      }
+    });
+  </script>
+</body>
+
+</html>
