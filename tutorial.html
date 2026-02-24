@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lifetopia World - Mini Tutorial</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico?v=1">
   <style>
@@ -216,10 +217,17 @@
       border-color: #b4ffb8;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
+
+      html,
+      body {
+        font-size: 18px;
+        /* Increase base font size on mobile */
+      }
+
       .content {
         grid-template-columns: minmax(0, 1fr);
-        padding: 12px 16px;
+        padding: 16px 20px;
       }
 
       .frame {
@@ -230,19 +238,29 @@
       }
 
       .title {
-        font-size: 22px;
+        font-size: 26px;
       }
 
       .subtitle {
-        font-size: 12px;
-      }
-
-      .section-title {
         font-size: 16px;
       }
 
+      .section-title {
+        font-size: 22px;
+      }
+
       .text {
-        font-size: 13px;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .list {
+        font-size: 17px;
+      }
+
+      .key {
+        font-size: 14px;
+        padding: 3px 8px;
       }
 
       .modal-content {
@@ -253,6 +271,10 @@
       .close {
         right: 20px;
         top: 10px;
+      }
+
+      .gif-label {
+        font-size: 14px;
       }
     }
   </style>
