@@ -1,47 +1,154 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <title>Lifetopia World</title>
-    <style>
-      html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
-    </style>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="width: 100%; height: 100%; display: block; background: url('Build/lifetopia-build.jpg') center / cover"></canvas>
-    <script src="Build/lifetopia-build.loader.js"></script>
-    <script>
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
 
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <title>Lifetopia World</title>
+  <style>
+    @font-face {
+      font-family: 'Munro';
+      src: url('fonts/Munro.ttf') format('truetype');
+    }
 
-        document.body.style.textAlign = "left";
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    #unity-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    #loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('assets/background.png') center / cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: opacity 0.5s ease;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.1);
+      border-top: 5px solid #00f2fe;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
-        arguments: [],
-        dataUrl: "Build/lifetopia-build.data",
-        frameworkUrl: "Build/lifetopia-build.framework.js",
-        codeUrl: "Build/lifetopia-build.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Lifetopia World",
-        productName: "lifetopia",
-        productVersion: "0.0.1",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
-    </script>
-  </body>
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    #loading-text {
+      color: white;
+      font-family: 'Munro', sans-serif;
+      font-size: 2rem;
+      font-weight: normal;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    #progress-bar {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-top: 15px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    #progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+      transition: width 0.2s ease;
+    }
+  </style>
+</head>
+
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <div id="unity-container">
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+      <div id="loading-text">Loading: 0%</div>
+      <div id="progress-bar">
+        <div id="progress-fill"></div>
+      </div>
+    </div>
+    <canvas id="unity-canvas" width=960 height=600 tabindex="-1"
+      style="width: 100%; height: 100%; display: block; background: url('Build/lifetopia-build.jpg') center / cover"></canvas>
+  </div>
+  <script src="Build/lifetopia-build.loader.js"></script>
+  <script>
+    var canvas = document.querySelector("#unity-canvas");
+    var loadingOverlay = document.querySelector("#loading-overlay");
+    var loadingText = document.querySelector("#loading-text");
+    var progressFill = document.querySelector("#progress-fill");
+
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      // Mobile device style: fill the whole browser client area with the game canvas:
+      var meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.position = "fixed";
+
+      document.body.style.textAlign = "left";
+    }
+
+    createUnityInstance(canvas, {
+      arguments: [],
+      dataUrl: "Build/lifetopia-build.data",
+      frameworkUrl: "Build/lifetopia-build.framework.js",
+      codeUrl: "Build/lifetopia-build.wasm",
+      streamingAssetsUrl: "StreamingAssets",
+      companyName: "Lifetopia World",
+      productName: "lifetopia",
+      productVersion: "0.0.1",
+    }, (progress) => {
+      var percentage = Math.round(100 * progress);
+      loadingText.innerHTML = "Loading: " + percentage + "%";
+      progressFill.style.width = percentage + "%";
+    }).then((unityInstance) => {
+      // Hide loading overlay with fade out
+      loadingOverlay.style.opacity = "0";
+      setTimeout(() => {
+        loadingOverlay.style.display = "none";
+      }, 500);
+    }).catch((message) => {
+      alert(message);
+    });
+  </script>
+</body>
+
 </html>
