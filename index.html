@@ -135,6 +135,7 @@
       companyName: "Lifetopia World",
       productName: "lifetopia",
       productVersion: "0.0.1",
+      dataCaching: false, // Recommended for hosted builds to avoid IndexedDB issues
     }, (progress) => {
       var percentage = Math.round(100 * progress);
       loadingText.innerHTML = "Loading: " + percentage + "%";
@@ -146,7 +147,9 @@
         loadingOverlay.style.display = "none";
       }, 500);
     }).catch((message) => {
-      alert(message);
+      // Enhanced error handling for hosted environment
+      console.error("Unity Load Error:", message);
+      alert("Unity failed to load. This is often due to server configuration (MIME types/Compression) or memory limits on your VPS.\n\nError: " + message + "\n\nSee implementation_plan.md for the required Nginx/Apache configuration.");
     });
   </script>
 </body>
